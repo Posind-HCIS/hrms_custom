@@ -50,7 +50,7 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 					default: selected_company,
 					reqd: 1
 				}
-			],
+			],  
 			primary_action_label: __('Select'),
 			primary_action: function(values) {
 				selected_company = values.company;
