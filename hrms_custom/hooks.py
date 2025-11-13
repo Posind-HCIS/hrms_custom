@@ -257,3 +257,8 @@ permission_query_conditions = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
+website_route_rules = [
+    {"from_route": "/api/ping", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.ping"},
+    {"from_route": "/api/pong", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.pong"}
+]
