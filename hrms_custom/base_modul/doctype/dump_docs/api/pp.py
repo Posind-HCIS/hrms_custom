@@ -6,7 +6,7 @@ def ping():
     """Endpoint publik: /api/ping"""
     return {"message": "PING!", "status": "success"}
 
-@frappe.whitelist()
+@frappe.whitelist() # url:  http://hrms.locals:8000/api/method/hrms_custom.base_modul.doctype.dump_docs.api.pp.pong
 def pong():
     """Endpoint butuh login: /api/pong"""
     return {

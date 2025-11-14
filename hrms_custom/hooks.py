@@ -258,7 +258,16 @@ permission_query_conditions = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
-website_route_rules = [
-    {"from_route": "/api/ping", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.ping"},
-    {"from_route": "/api/pong", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.pong"}
+# website_route_rules = [
+#     {"from_route": "/api/ping", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.ping"},
+#     {"from_route": "/api/pong", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.pong"}
+# ]
+fixtures = [
+       "Server Script",
+        # Add other DocTypes you want to export with your app
 ]
+
+# website_route_rules = [
+#     {"from_route": "/api/v1/ping", "to_route": "/api/method/hrms_custom.base_modul.doctype.dump_docs.api.pp.ping", "status_code": "302"},
+# ]
+
