@@ -41,7 +41,7 @@ app_license = "mit"
 
 # include js in page
 page_js = {
-	"organizational-chart": "public/js/organizational_chart_extension.js"
+	"organizational-chart": "public/js/organizational_chart_extension.js",
 }
 
 fixtures = [

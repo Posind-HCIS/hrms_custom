@@ -1,4 +1,4 @@
-frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
+frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 	frappe.ui.make_app_page({
 		parent: wrapper,
 		title: 'Organizational Chart',
@@ -20,13 +20,15 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 
 	// Custom company selector
 	let selected_company = frappe.defaults.get_default("company");
-	
+	let selected_department = frappe.defaults.get_default("department");
+	format = (selected_company != null ? selected_company : '') + (selected_department != null ? ' - ' + selected_department : '');
+
 	let company_selector_html = `
 		<div class="custom-company-selector" style="padding: 10px 15px; border-bottom: 1px solid #d1d8dd; background: #f9fafb;">
 			<div style="display: flex; align-items: center; gap: 10px;">
 				<strong style="font-size: 14px; color: #1f2937;">Company:</strong>
 				<div class="company-display" style="flex: 1; padding: 7px 12px; background: white; border: 1px solid #d1d8dd; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;">
-					<span class="company-name" style="color: #374151; font-size: 14px;">${selected_company || 'Click to select company'}</span>
+					<span class="company-name" style="color: #374151; font-size: 14px;">${format || 'Click to select company'}</span>
 					<svg style="width: 16px; height: 16px; color: #6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 					</svg>
@@ -34,35 +36,60 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 			</div>
 		</div>
 	`;
-	
+
 	page.main.prepend(company_selector_html);
-	
+
 	// Click handler
-	$('.company-display').on('click', function() {
+	$('.company-display').on('click', function () {
 		let dialog = new frappe.ui.Dialog({
 			title: __('Select Company'),
-			fields: [
-				{
+			fields: [{
 					fieldtype: 'Link',
 					fieldname: 'company',
 					label: __('Company'),
 					options: 'Company',
 					default: selected_company,
-					reqd: 1
+					reqd: 1,
+					onchange: function () {
+						// Clear department field when company changes
+						dialog.set_value('department', '');
+						// Refresh department field to apply new filter
+						if (dialog.fields_dict.department) {
+							dialog.fields_dict.department.refresh();
+						}
+					}
+				},
+				{
+					fieldtype: 'Link',
+					fieldname: 'department',
+					label: __('Department'),
+					options: 'Department',
+					// depends_on: 'eval:doc.company',
+					get_query: function () {
+						let company = dialog.get_value('company');
+						if (company) {
+							return {
+								filters: {
+									'company': company
+								}
+							};
+						}
+						return {};
+					}
 				}
 			],
 			primary_action_label: __('Select'),
-			primary_action: function(values) {
+			primary_action: function (values) {
 				selected_company = values.company;
-				$('.company-name').text(selected_company);
-				loadChart(current_view, selected_company);
+				selected_department = values.department;
+				$('.company-name').text(selected_company + (selected_department ? ' - ' + selected_department : ''));
+				loadChart(current_view, selected_company, selected_department);
 				dialog.hide();
 			}
 		});
 		dialog.show();
 	});
-	
-	// Hover effect
+// Hover effect
 	$('.company-display').on('mouseenter', function() {
 		$(this).css({
 			'border-color': '#3b82f6',
@@ -121,7 +148,7 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 	}
 
 	// Function to load chart
-	function loadChart(view, company) {
+	function loadChart(view, company, department) {
 		// Update view indicator
 		updateViewIndicator(view);
 		
@@ -148,7 +175,7 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 			}
 			
 			// Override company to use selected one
-			organizational_chart.company = company;
+			organizational_chart.company = [company, department];
 			
 			// Render chart
 			organizational_chart.make_svg_markers();
@@ -174,11 +201,11 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 			
 			// Re-add view buttons
 			page.add_inner_button(__('Departments'), function() {
-				loadChart('department', company);
+				loadChart('department', company, department);
 			}, __('View'));
 
 			page.add_inner_button(__('Employees'), function() {
-				loadChart('employee', company);
+				loadChart('employee', company, department);
 			}, __('View'));
 			
 			// Add expand/collapse
@@ -188,7 +215,7 @@ frappe.pages['organizational-chart'].on_page_load = function(wrapper) {
 
 				page.remove_inner_button(__("Expand All"));
 				page.add_inner_button(__("Collapse All"), function () {
-					loadChart(view, company);
+					loadChart(view, company, department);
 					organizational_chart.all_nodes_expanded = false;
 					page.remove_inner_button(__("Collapse All"));
 				});
