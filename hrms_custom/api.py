@@ -1,6 +1,8 @@
 import json
+from erpnext.setup.doctype import department
 import frappe
 from frappe import _
+from hrms.hr.page.organizational_chart.organizational_chart import get_connections as hrms_get_connections
 
 @frappe.whitelist()
 def get_department_children(parent=None, company=None, department=None, show_self=0, doctype="Department"):
@@ -88,10 +90,13 @@ def get_department_children(parent=None, company=None, department=None, show_sel
     def make_node(d):
         # Node for HierarchyChart - must match Employee format
         children = children_by_parent.get(d.name, [])
+
+        employee_name = frappe.db.get_value("Employee", {"company": company, "department": d.name, "status": "Active"}, "name")
+        
         return frappe._dict({
             "id": d.name,
             "name": d.department_name or d.name,
-            "title": "Department",
+            "title": employee_name or "Departments",
             "image": "",  # Department doesn't have image
             "expandable": 1 if children else 0,
             "connections": len(children),
@@ -209,17 +214,98 @@ def get_all_department_nodes(company=None):
     return nodes
 
 
+#### ini untuk Employee Hierarchy dengan filter department ####
+@frappe.whitelist()
+def get_children(parent=None, company=None, departments=None, exclude_node=None):
+    filters = [["status", "=", "Active"]]
+    
+    if company and company != "All Companies":
+        filters.append(["company", "=", company])
+
+    if exclude_node:
+        filters.append(["name", "!=", exclude_node])
+
+    # Ambil SEMUA employee aktif (kita butuh data parent juga)
+    all_employees = frappe.get_all(
+        "Employee",
+        filters=filters,
+        fields=["name", "reports_to", "department", "employee_name", "image", "designation", "lft", "rgt"],
+        order_by="name"
+    )
+
+    # Ubah jadi dict biar cepet lookup
+    emp_dict = {emp["name"]: emp for emp in all_employees}
+
+    # Parse departments yang dipilih
+    selected_depts = []
+    if departments:
+        selected_depts = [d.strip() for d in departments.split(",") if d.strip()]
+
+    # Tentukan mana yang jadi ROOT saat ini
+    root_ids = set()
+    
+    if parent:
+        # Kalau lagi expand node, langsung ambil anak dari parent itu aja
+        filters.append(["reports_to", "=", parent])
+    else:
+        # Kalau lagi load root (parent=None), kita tentukan root baru berdasarkan department
+        for emp in all_employees:
+            if emp["department"] in selected_depts:
+                parent_id = emp.get("reports_to")
+                parent_dept = emp_dict.get(parent_id, {}).get("department") if parent_id else None
+                
+                # Jika parent-nya TIDAK ADA atau parent-nya department-nya di LUAR selected_depts
+                # maka orang ini jadi ROOT baru
+                if not parent_id or parent_dept not in selected_depts:
+                    root_ids.add(emp["name"])
+
+        if root_ids:
+            filters.append(["name", "in", list(root_ids)])
+        else:
+            return []  # tidak ada yang match
+
+    # Sekarang ambil data sesuai kondisi (baik root baru atau children)
+    employees = frappe.get_all(
+        "Employee",
+        fields=[
+            "employee_name as name",
+            "name as id",
+            "lft", "rgt", "reports_to", "image",
+            "designation as title",
+            "department"
+        ],
+        filters=filters,
+        order_by="name",
+    )
+
+    # Tambah connections
+    for employee in employees:
+        employee.connections = hrms_get_connections(employee.id, employee.lft, employee.rgt)
+        employee.expandable = bool(employee.connections)
+
+    return employees
+
+
 @frappe.whitelist()
 def get_employee_children(parent=None, company=None, exclude_node=None):
     """
     Wrapper for Employee hierarchy that removes avatar/image frame.
     Calls original HRMS get_children but strips image field.
     """
+    if isinstance(company, str) and company.startswith('['):
+        try:
+            parsed = json.loads(company)
+            if isinstance(parsed, list) and len(parsed) >= 2:
+                company = parsed[0]
+                department = parsed[1] if parsed[1] else None
+            elif isinstance(parsed, list) and len(parsed) == 1:
+                company = parsed[0]
+        except (json.JSONDecodeError, ValueError):
+            pass  # Keep company as is if parsing fails
     # Import original HRMS method
-    from hrms.hr.page.organizational_chart.organizational_chart import get_children as hrms_get_children
     
     # Call original method
-    employees = hrms_get_children(parent=parent, company=company, exclude_node=exclude_node)
+    employees = get_children(parent=parent, company=company, departments=department, exclude_node=exclude_node)
     
     # Remove image from each employee node to hide avatar frame
     for emp in employees:

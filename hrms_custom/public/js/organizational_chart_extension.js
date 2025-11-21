@@ -24,10 +24,10 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 	format = (selected_company != null ? selected_company : '') + (selected_department != null ? ' - ' + selected_department : '');
 
 	let company_selector_html = `
-		<div class="custom-company-selector" style="padding: 10px 15px; border-bottom: 1px solid #d1d8dd; background: #f9fafb;">
+		<div class="custom-company-selector" style="padding: 10px 15px; border-bottom: 1px solid #d1d8dd; background: #f9fafb; position: relative; z-index: 1000;">
 			<div style="display: flex; align-items: center; gap: 10px;">
 				<strong style="font-size: 14px; color: #1f2937;">Company:</strong>
-				<div class="company-display" style="flex: 1; padding: 7px 12px; background: white; border: 1px solid #d1d8dd; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;">
+				<div class="company-display" style="flex: 1; padding: 7px 12px; background: white; border: 1px solid #d1d8dd; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; position: relative; z-index: 1001;">
 					<span class="company-name" style="color: #374151; font-size: 14px;">${format || 'Click to select company'}</span>
 					<svg style="width: 16px; height: 16px; color: #6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -39,8 +39,8 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 
 	page.main.prepend(company_selector_html);
 
-	// Click handler
-	$('.company-display').on('click', function () {
+	// Click handler - menggunakan event delegation pada page.main
+	page.main.on('click', '.company-display', function () {
 		let dialog = new frappe.ui.Dialog({
 			title: __('Select Company'),
 			fields: [{
@@ -89,13 +89,14 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		});
 		dialog.show();
 	});
-// Hover effect
-	$('.company-display').on('mouseenter', function() {
+	
+	// Hover effect - menggunakan event delegation pada page.main
+	page.main.on('mouseenter', '.company-display', function() {
 		$(this).css({
 			'border-color': '#3b82f6',
 			'box-shadow': '0 0 0 3px rgba(59, 130, 246, 0.1)'
 		});
-	}).on('mouseleave', function() {
+	}).on('mouseleave', '.company-display', function() {
 		$(this).css({
 			'border-color': '#d1d8dd',
 			'box-shadow': 'none'
