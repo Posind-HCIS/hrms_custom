@@ -17,6 +17,78 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		overflow: "auto",
 		position: "relative"
 	});
+	
+	// Inject custom CSS untuk warna node dan connector
+	// if (!$('#custom-org-chart-colors').length) {
+	// 	$('<style id="custom-org-chart-colors">')
+	// 		.text(`
+	// 			/* Node Card Colors */
+	// 			.node-card {
+	// 				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+	// 				border: none !important;
+	// 				box-shadow: 0 4px 6px rgba(102, 126, 234, 0.4) !important;
+	// 			}
+				
+	// 			.node-card .node-name,
+	// 			.node-card .node-title {
+	// 				color: white !important;
+	// 			}
+				
+	// 			.node-card.active {
+	// 				background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+	// 				box-shadow: 0 6px 12px rgba(245, 87, 108, 0.5) !important;
+	// 				transform: scale(1.05);
+	// 			}
+				
+	// 			.node-card.active-path {
+	// 				background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+	// 				box-shadow: 0 4px 8px rgba(79, 172, 254, 0.4) !important;
+	// 			}
+				
+	// 			.node-card.collapsed {
+	// 				background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important;
+	// 				opacity: 0.7;
+	// 			}
+				
+	// 			/* Connector Colors */
+	// 			.active-connector {
+	// 				stroke: #f5576c !important;
+	// 				stroke-width: 3px !important;
+	// 			}
+				
+	// 			.collapsed-connector {
+	// 				stroke: #4facfe !important;
+	// 				stroke-width: 2px !important;
+	// 			}
+				
+	// 			/* Connections Badge */
+	// 			.node-card .node-connections {
+	// 				background: rgba(255, 255, 255, 0.3) !important;
+	// 				color: white !important;
+	// 				padding: 3px 10px !important;
+	// 				border-radius: 12px !important;
+	// 				font-weight: 600 !important;
+	// 				font-size: 11px !important;
+	// 				display: inline-block !important;
+	// 				backdrop-filter: blur(10px) !important;
+	// 				border: 1px solid rgba(255, 255, 255, 0.5) !important;
+	// 			}
+				
+	// 			/* Avatar Border */
+	// 			.node-card .avatar-frame {
+	// 				border: 3px solid white !important;
+	// 				box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+	// 			}
+				
+	// 			/* Hover Effect */
+	// 			.node-card:hover {
+	// 				transform: translateY(-2px);
+	// 				box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6) !important;
+	// 				transition: all 0.3s ease;
+	// 			}
+	// 		`)
+	// 		.appendTo('head');
+	// }
 
 	// Custom company selector
 	let selected_company = frappe.defaults.get_default("company");
@@ -263,3 +335,34 @@ function setupNodeClickHandlers(organizational_chart, doctype) {
 		}, 100);
 	});
 }
+const customCss = `
+    .hierarchy-chart .node-card {
+        background: #ffffff; /* Default background biar kontras */
+        border: 1px solid #cbd5e1;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: all 0.2s;
+    }
+    .hierarchy-chart .node-card:hover {
+        border-color: #3b82f6;
+        box-shadow: 0 4px 8px rgba(59,130,246,0.2);
+    }
+    
+    /* Warna beda per level biar ga nyaru (level 0 = root, level 1, dst) */
+    .hierarchy-chart .node-card.level-0 { background: #dbeafe; } /* Biru muda */
+    .hierarchy-chart .node-card.level-1 { background: #d1fae5; } /* Hijau muda */
+    .hierarchy-chart .node-card.level-2 { background: #fef3c7; } /* Kuning muda */
+    .hierarchy-chart .node-card.level-3 { background: #fee2e2; } /* Merah muda */
+    .hierarchy-chart .node-card.level-4 { background: #f3e8ff; } /* Ungu muda */
+    
+    /* Connectors (garis) biar ga nyaru, bikin lebih tebal & berwarna */
+    .hierarchy-chart .connector path {
+        stroke: #64748b; /* Abu gelap biar kontras */
+        stroke-width: 2px;
+    }
+    .hierarchy-chart .connector.arrow path {
+        fill: #64748b;
+    }
+`;
+
+// Append to head or page
+$('head').append(`<style>${customCss}</style>`);
