@@ -97,7 +97,7 @@ def get_department_children(parent=None, company=None, department=None, show_sel
             "id": d.name,
             "name": d.department_name or d.name,
             "title": employee_name or "Departments",
-            "image": "",  # Department doesn't have image
+            # "image": ,  # Department doesn't have image
             "expandable": 1 if children else 0,
             "connections": len(children),
             "lft": 0,  # Placeholder values
@@ -240,6 +240,9 @@ def get_children(parent=None, company=None, departments=None, exclude_node=None)
     selected_depts = []
     if departments:
         selected_depts = [d.strip() for d in departments.split(",") if d.strip()]
+    else:
+        # Jika tidak ada department filter, anggap semua department terpilih
+        selected_depts = list({emp["department"] for emp in all_employees if emp["department"]})
 
     # Tentukan mana yang jadi ROOT saat ini
     root_ids = set()
@@ -289,8 +292,8 @@ def get_children(parent=None, company=None, departments=None, exclude_node=None)
 @frappe.whitelist()
 def get_employee_children(parent=None, company=None, exclude_node=None):
     """
-    Wrapper for Employee hierarchy that removes avatar/image frame.
-    Calls original HRMS get_children but strips image field.
+    Custom Employee hierarchy that returns data in same format as department nodes.
+    Returns employee nodes with consistent field structure for better visualization.
     """
     if isinstance(company, str) and company.startswith('['):
         try:
@@ -302,13 +305,27 @@ def get_employee_children(parent=None, company=None, exclude_node=None):
                 company = parsed[0]
         except (json.JSONDecodeError, ValueError):
             pass  # Keep company as is if parsing fails
-    # Import original HRMS method
     
     # Call original method
     employees = get_children(parent=parent, company=company, departments=department, exclude_node=exclude_node)
     
-    # Remove image from each employee node to hide avatar frame
+    # Transform employee nodes to match department format
     for emp in employees:
-        emp.image = ""
+        # Remove avatar - set to None instead of empty string
+        # Template might check for falsy value
+        emp.image = None
+        emp["image"] = None  # Ensure it's set in dict too
+        
+        # Add department info to title if available
+        # Format: "Designation - Department" or just "Designation"
+        current_title = emp.get("title", "")
+        dept_name = emp.get("department", "")
+        
+        if current_title and dept_name:
+            emp.title = f"{current_title} - {dept_name}"
+        elif current_title:
+            emp.title = current_title
+        else:
+            emp.title = dept_name or "Employee"
     
     return employees

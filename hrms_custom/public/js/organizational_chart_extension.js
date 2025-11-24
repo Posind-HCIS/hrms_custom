@@ -7,7 +7,7 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 
 	let page = wrapper.page;
 	let organizational_chart;
-	let current_view = 'employee'; // default view
+	let current_view = ''; // default view
 
 	// Setup page styling
 	page.main.addClass("frappe-card");
@@ -218,44 +218,61 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		let dialog = new frappe.ui.Dialog({
 			title: __('Select Company'),
 			fields: [{
-				fieldtype: 'Link',
-				fieldname: 'company',
-				label: __('Company'),
-				options: 'Company',
-				default: selected_company,
-				reqd: 1,
-				onchange: function () {
-					// Clear department field when company changes
-					dialog.set_value('department', '');
-					// Refresh department field to apply new filter
-					if (dialog.fields_dict.department) {
-						dialog.fields_dict.department.refresh();
+					fieldtype: 'Link',
+					fieldname: 'company',
+					label: __('Company'),
+					options: 'Company',
+					default: selected_company,
+					reqd: 1,
+					onchange: function () {
+						// Clear department field when company changes
+						dialog.set_value('department', '');
+						// Refresh department field to apply new filter
+						if (dialog.fields_dict.department) {
+							dialog.fields_dict.department.refresh();
+						}
+					}
+				},
+				{
+					fieldtype: 'Check',
+					fieldname: 'has_department',
+					label: __('Filter by Department'),
+					onchange: function () {
+						let has_dept = dialog.get_value('has_department');
+						if (has_dept) {
+							dialog.set_df_property('department', 'reqd', 1);
+							dialog.get_field('department').$wrapper.show();
+						} else {
+							dialog.set_df_property('department', 'reqd', 0);
+							dialog.set_value('department', '');
+							dialog.get_field('department').$wrapper.hide();
+						}
+					}
+				},
+				{
+					fieldtype: 'Link',
+					fieldname: 'department',
+					label: __('Department'),
+					options: 'Department',
+					depends_on: 'eval:doc.has_department',
+					get_query: function () {
+						let company = dialog.get_value('company');
+						if (company) {
+							return {
+								filters: {
+									'company': company
+								}
+							};
+						}
+						return {};
 					}
 				}
-			},
-			{
-				fieldtype: 'Link',
-				fieldname: 'department',
-				label: __('Department'),
-				options: 'Department',
-				// depends_on: 'eval:doc.company',
-				get_query: function () {
-					let company = dialog.get_value('company');
-					if (company) {
-						return {
-							filters: {
-								'company': company
-							}
-						};
-					}
-					return {};
-				}
-			}
 			],
 			primary_action_label: __('Select'),
 			primary_action: function (values) {
 				selected_company = values.company;
 				selected_department = values.department;
+				current_view = 'department';
 				$('.company-name').text(selected_company + (selected_department ? ' - ' + selected_department : ''));
 				loadChart(current_view, selected_company, selected_department);
 				dialog.hide();
@@ -307,18 +324,20 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 
 		// Append to page title area
 		$('.title-area>div>.flex').append(view_indicator);
-
-		// Initial text
-		view_indicator.text(__('| Employees'));
+		
+		// Initial text ganti jadi kosong
+        view_indicator.text(__(''));
 	}, 300);
 
 	function updateViewIndicator(view) {
 		if (view === 'department') {
 			page.set_title_sub(__('| Departments'));
 			// $('.view-indicator').css('background', '#667eea');
-		} else {
+		} else if (view === 'employee') {
 			page.set_title_sub(__('| Employees'));
 			// $('.view-indicator').css('background', '#48bb78');
+		}else {
+			page.set_title_sub('');
 		}
 	}
 	// Function to hide avatar in department view
@@ -370,9 +389,6 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 			let original_load_children = organizational_chart.load_children.bind(organizational_chart);
 			organizational_chart.load_children = function (node, deep = false) {
 				original_load_children(node, deep);
-				setTimeout(() => {
-					$(document).trigger('hierarchy-children-loaded');
-				}, 300);
 			};
 
 			// Setup click handlers for nodes
