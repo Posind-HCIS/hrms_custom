@@ -17,78 +17,180 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		overflow: "auto",
 		position: "relative"
 	});
-	
+
 	// Inject custom CSS untuk warna node dan connector
-	// if (!$('#custom-org-chart-colors').length) {
-	// 	$('<style id="custom-org-chart-colors">')
-	// 		.text(`
-	// 			/* Node Card Colors */
-	// 			.node-card {
-	// 				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-	// 				border: none !important;
-	// 				box-shadow: 0 4px 6px rgba(102, 126, 234, 0.4) !important;
-	// 			}
-				
-	// 			.node-card .node-name,
-	// 			.node-card .node-title {
-	// 				color: white !important;
-	// 			}
-				
-	// 			.node-card.active {
-	// 				background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
-	// 				box-shadow: 0 6px 12px rgba(245, 87, 108, 0.5) !important;
-	// 				transform: scale(1.05);
-	// 			}
-				
-	// 			.node-card.active-path {
-	// 				background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
-	// 				box-shadow: 0 4px 8px rgba(79, 172, 254, 0.4) !important;
-	// 			}
-				
-	// 			.node-card.collapsed {
-	// 				background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important;
-	// 				opacity: 0.7;
-	// 			}
-				
-	// 			/* Connector Colors */
-	// 			.active-connector {
-	// 				stroke: #f5576c !important;
-	// 				stroke-width: 3px !important;
-	// 			}
-				
-	// 			.collapsed-connector {
-	// 				stroke: #4facfe !important;
-	// 				stroke-width: 2px !important;
-	// 			}
-				
-	// 			/* Connections Badge */
-	// 			.node-card .node-connections {
-	// 				background: rgba(255, 255, 255, 0.3) !important;
-	// 				color: white !important;
-	// 				padding: 3px 10px !important;
-	// 				border-radius: 12px !important;
-	// 				font-weight: 600 !important;
-	// 				font-size: 11px !important;
-	// 				display: inline-block !important;
-	// 				backdrop-filter: blur(10px) !important;
-	// 				border: 1px solid rgba(255, 255, 255, 0.5) !important;
-	// 			}
-				
-	// 			/* Avatar Border */
-	// 			.node-card .avatar-frame {
-	// 				border: 3px solid white !important;
-	// 				box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
-	// 			}
-				
-	// 			/* Hover Effect */
-	// 			.node-card:hover {
-	// 				transform: translateY(-2px);
-	// 				box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6) !important;
-	// 				transition: all 0.3s ease;
-	// 			}
-	// 		`)
-	// 		.appendTo('head');
-	// }
+	if (!$('#custom-org-chart-colors').length) {
+		$('<style id="custom-org-chart-colors">')
+			.text(`
+				/* Node Card Colors */
+				.node-card {
+					background: linear-gradient(135deg, #1f305e 0%, #2c4484 100%) !important;
+					border: none !important;
+					box-shadow: 0 4px 6px rgba(102, 126, 234, 0.4) !important;
+				}
+
+					.node-card .node-name,
+						.node-name.d-flex, .node-name.d-flex.flex-row {
+							display: flex !important;
+							align-items: center !important;
+							gap: 14px !important; /* increased gap between text and edit button */
+						}
+				.node-card .node-title {
+					color: white !important;
+				}
+
+				.node-meta .mr-3 {
+					display: none !important;
+				}
+
+				.node-name {
+					align-items: center;
+					justify-content: space-between;
+					margin-bottom: 2px;
+					width: 20rem;
+				}
+
+				.node-name span.ellipsis {
+					font-size: 12px;
+						color: #ffffff !important; /* make ellipsis text white for contrast */
+
+				}
+
+				.node-card.active {
+					background: linear-gradient(135deg, #E34234 0%, #cc3b2f 100%) !important;
+					box-shadow: 0 6px 12px rgba(245, 87, 108, 0.5) !important;
+					transform: scale(1.05);
+				}
+
+				.node-card.active .node-name {
+						width: 16rem;
+				}
+
+				.node-card.active-path {
+					background: linear-gradient(135deg, #1f305e 0%, #2c4484 100%) !important;
+					box-shadow: 0 4px 8px rgba(79, 172, 254, 0.4) !important;
+				}
+
+				.node-card.collapsed {
+					background: linear-gradient(135deg, #1f305e 0%, #2c4484 100%) !important;
+					opacity: 0.7;
+				}
+
+				/* Connector Colors */
+				.active-connector {
+					stroke: #E34234 !important;
+					stroke-width: 3px !important;
+				}
+
+				.collapsed-connector {
+					stroke: #1f305e !important;
+					stroke-width: 2px !important;
+				}
+
+				/* Connections Badge */
+				.node-card .node-connections {
+					background: rgba(255, 255, 255, 0.3) !important;
+					color: white !important;
+					padding: 3px 10px !important;
+					border-radius: 12px !important;
+					font-weight: 600 !important;
+					font-size: 11px !important;
+					display: inline-block !important;
+					backdrop-filter: blur(10px) !important;
+					border: 1px solid rgba(255, 255, 255, 0.5) !important;
+				}
+
+				/* Avatar Border */
+				.node-card .avatar-frame {
+					border: 3px solid white !important;
+					box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+				}
+
+				/* Hover Effect */
+				.node-card:hover {
+					transform: translateY(-2px);
+					box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6) !important;
+					transition: all 0.3s ease;
+				}
+
+					/* If node-name uses flex row with an ellipsis span and an edit button,
+					   make the text span flexible so it grows and wraps instead of truncating */
+					.node-name.d-flex, .node-name.d-flex.flex-row {
+						display: flex !important;
+						align-items: center !important;
+						gap: 15px !important;
+					}
+
+					.node-name.d-flex .ellipsis,
+					.node-name .ellipsis {
+						flex: 1 1 320px !important;     /* allow to grow/shrink, start wider */
+						max-width: 200px !important;          /* allow proper flex shrinking */
+						white-space: normal !important;  /* allow wrapping */
+						word-break: break-word !important;
+						overflow-wrap: anywhere !important;
+						overflow: visible !important;
+						text-overflow: clip !important;
+					}
+
+					/* Keep edit button fixed size so text gets the remaining space */
+					.node-name .btn-edit-node,
+					.node-name .node-edit-icon,
+					.node-name .edit-chart-node {
+						flex: 0 0 auto !important;
+						margin-left: 2px !important; /* more breathing room */
+					}
+
+					/* Flexible nodes: allow wrapping for long text and reasonable sizing */
+					.hierarchy-chart .node-card,
+					.node-card {
+						display: inline-flex !important;
+						flex-direction: column !important;
+						vertical-align: top;
+						min-width: 120px !important;
+						max-width: 520px !important; /* increased to allow wider nodes */
+						white-space: normal !important;
+						word-break: break-word !important;
+						overflow-wrap: anywhere !important;
+						box-sizing: border-box !important;
+					}
+
+					/* Ensure inner text elements wrap and don't ellipsize */
+					.hierarchy-chart .node-card .node-name,
+					.hierarchy-chart .node-card .node-title,
+					.node-card .node-content,
+					.node-card .node-meta {
+						white-space: normal !important;
+						overflow: visible !important;
+						text-overflow: unset !important;
+						word-break: break-word !important;
+						overflow-wrap: anywhere !important;
+						display: block !important;
+						max-height: none !important;
+						height: auto !important;
+					}
+
+					/* Flex children should be allowed to shrink so text can wrap */
+					.node-card .node-row,
+					.node-card .node-info {
+						flex: 1 1 auto !important;
+						min-width: 0 !important;
+					}
+
+					/* Limit avatar size so text gets space */
+					.node-card .avatar-frame {
+						flex: 0 0 auto !important;
+						margin-right: 8px;
+						max-width: 64px !important;
+					}
+
+					/* Ensure node container doesn't clip its content */
+					.node-card {
+						height: auto !important;
+						overflow: visible !important;
+					}
+			`)
+			.appendTo('head');
+	}
 
 	// Custom company selector
 	let selected_company = frappe.defaults.get_default("company");
@@ -116,39 +218,39 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		let dialog = new frappe.ui.Dialog({
 			title: __('Select Company'),
 			fields: [{
-					fieldtype: 'Link',
-					fieldname: 'company',
-					label: __('Company'),
-					options: 'Company',
-					default: selected_company,
-					reqd: 1,
-					onchange: function () {
-						// Clear department field when company changes
-						dialog.set_value('department', '');
-						// Refresh department field to apply new filter
-						if (dialog.fields_dict.department) {
-							dialog.fields_dict.department.refresh();
-						}
-					}
-				},
-				{
-					fieldtype: 'Link',
-					fieldname: 'department',
-					label: __('Department'),
-					options: 'Department',
-					// depends_on: 'eval:doc.company',
-					get_query: function () {
-						let company = dialog.get_value('company');
-						if (company) {
-							return {
-								filters: {
-									'company': company
-								}
-							};
-						}
-						return {};
+				fieldtype: 'Link',
+				fieldname: 'company',
+				label: __('Company'),
+				options: 'Company',
+				default: selected_company,
+				reqd: 1,
+				onchange: function () {
+					// Clear department field when company changes
+					dialog.set_value('department', '');
+					// Refresh department field to apply new filter
+					if (dialog.fields_dict.department) {
+						dialog.fields_dict.department.refresh();
 					}
 				}
+			},
+			{
+				fieldtype: 'Link',
+				fieldname: 'department',
+				label: __('Department'),
+				options: 'Department',
+				// depends_on: 'eval:doc.company',
+				get_query: function () {
+					let company = dialog.get_value('company');
+					if (company) {
+						return {
+							filters: {
+								'company': company
+							}
+						};
+					}
+					return {};
+				}
+			}
 			],
 			primary_action_label: __('Select'),
 			primary_action: function (values) {
@@ -161,14 +263,14 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		});
 		dialog.show();
 	});
-	
+
 	// Hover effect - menggunakan event delegation pada page.main
-	page.main.on('mouseenter', '.company-display', function() {
+	page.main.on('mouseenter', '.company-display', function () {
 		$(this).css({
 			'border-color': '#3b82f6',
 			'box-shadow': '0 0 0 3px rgba(59, 130, 246, 0.1)'
 		});
-	}).on('mouseleave', '.company-display', function() {
+	}).on('mouseleave', '.company-display', function () {
 		$(this).css({
 			'border-color': '#d1d8dd',
 			'box-shadow': 'none'
@@ -176,7 +278,7 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 	});
 
 	// View toggle buttons in toolbar
-	page.add_inner_button(__('Departments'), function() {
+	page.add_inner_button(__('Departments'), function () {
 		current_view = 'department';
 		if (selected_company) {
 			loadChart('department', selected_company);
@@ -185,7 +287,7 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		}
 	}, __('View'));
 
-	page.add_inner_button(__('Employees'), function() {
+	page.add_inner_button(__('Employees'), function () {
 		current_view = 'employee';
 		if (selected_company) {
 			loadChart('employee', selected_company);
@@ -193,45 +295,53 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 			frappe.msgprint(__('Please select a company first'));
 		}
 	}, __('View'));
-	
+
 	// Add view indicator label after page loads
 	setTimeout(() => {
 		//let view_indicator = $('<div class="view-indicator" style="display: inline-block; margin-left: 10px; padding: 6px 14px; background: #48bb78; color: white; border-radius: 5px; font-size: 13px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>');
 		let view_indicator = $('<div class="view-indicator" style="font-weight:bold;"></div>');
-		
-        page.set_title_sub = function(subtitle) {
+
+		page.set_title_sub = function (subtitle) {
 			view_indicator.text(subtitle);
 		};
-		
+
 		// Append to page title area
 		$('.title-area>div>.flex').append(view_indicator);
-		
+
 		// Initial text
-        view_indicator.text(__('| Employees'));
+		view_indicator.text(__('| Employees'));
 	}, 300);
-	
+
 	function updateViewIndicator(view) {
 		if (view === 'department') {
-			page.set_title_sub(__('| Departments'));    
+			page.set_title_sub(__('| Departments'));
 			// $('.view-indicator').css('background', '#667eea');
 		} else {
 			page.set_title_sub(__('| Employees'));
 			// $('.view-indicator').css('background', '#48bb78');
 		}
 	}
+	// Function to hide avatar in department view
+	function hideAvatar(view) {
+		if (view === 'department') {
+			$('.node-card .node-meta .mr-3').hide();
+		} else if (view === 'employee') {
+			$('.node-card .node-meta .mr-3').show();
+		}
 
+	}
 	// Function to load chart
 	function loadChart(view, company, department) {
 		// Update view indicator
 		updateViewIndicator(view);
-		
+
 		frappe.require("hierarchy-chart.bundle.js", () => {
 			// Clear existing chart
 			page.main.find('#hierarchy-chart-wrapper').remove();
-			
+
 			let method;
 			let doctype;
-			
+
 			if (view === 'department') {
 				method = 'hrms_custom.api.get_department_children';
 				doctype = 'Department';
@@ -239,48 +349,49 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 				method = 'hrms_custom.api.get_employee_children';
 				doctype = 'Employee';
 			}
-			
+			hideAvatar(view); // Hide or show avatar based on view
+
 			// Create chart
 			if (frappe.is_mobile()) {
 				organizational_chart = new hrms.HierarchyChartMobile(doctype, wrapper, method);
 			} else {
 				organizational_chart = new hrms.HierarchyChart(doctype, wrapper, method);
 			}
-			
+
 			// Override company to use selected one
 			organizational_chart.company = [company, department];
-			
+
 			// Render chart
 			organizational_chart.make_svg_markers();
 			organizational_chart.setup_hierarchy();
 			organizational_chart.render_root_nodes();
-			
+
 			// Override load_children to trigger event after loading
 			let original_load_children = organizational_chart.load_children.bind(organizational_chart);
-			organizational_chart.load_children = function(node, deep = false) {
+			organizational_chart.load_children = function (node, deep = false) {
 				original_load_children(node, deep);
 				setTimeout(() => {
 					$(document).trigger('hierarchy-children-loaded');
 				}, 300);
 			};
-			
+
 			// Setup click handlers for nodes
 			setTimeout(() => {
 				setupNodeClickHandlers(organizational_chart, doctype);
 			}, 500);
-			
+
 			// Setup Export and Expand buttons
 			page.clear_inner_toolbar();
-			
+
 			// Re-add view buttons
-			page.add_inner_button(__('Departments'), function() {
+			page.add_inner_button(__('Departments'), function () {
 				loadChart('department', company, department);
 			}, __('View'));
 
-			page.add_inner_button(__('Employees'), function() {
+			page.add_inner_button(__('Employees'), function () {
 				loadChart('employee', company, department);
 			}, __('View'));
-			
+
 			// Add expand/collapse
 			page.add_inner_button(__("Expand All"), function () {
 				organizational_chart.load_children(organizational_chart.root_node, true);
@@ -314,55 +425,24 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 
 // Setup node click handlers
 function setupNodeClickHandlers(organizational_chart, doctype) {
-	$('.node-card').off('dblclick').each(function() {
+	$('.node-card').off('dblclick').each(function () {
 		let $card = $(this);
 		let node_id = $card.attr('id');
-		
+
 		if (!node_id) return;
-		
+
 		// Double click - open detail form
-		$card.on('dblclick', function(e) {
+		$card.on('dblclick', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			frappe.set_route('Form', doctype, node_id);
 		});
 	});
-	
+
 	// Re-attach expand/collapse handlers after children load
-	$(document).off('hierarchy-children-loaded').on('hierarchy-children-loaded', function() {
+	$(document).off('hierarchy-children-loaded').on('hierarchy-children-loaded', function () {
 		setTimeout(() => {
 			setupNodeClickHandlers(organizational_chart, doctype);
 		}, 100);
 	});
 }
-const customCss = `
-    .hierarchy-chart .node-card {
-        background: #ffffff; /* Default background biar kontras */
-        border: 1px solid #cbd5e1;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        transition: all 0.2s;
-    }
-    .hierarchy-chart .node-card:hover {
-        border-color: #3b82f6;
-        box-shadow: 0 4px 8px rgba(59,130,246,0.2);
-    }
-    
-    /* Warna beda per level biar ga nyaru (level 0 = root, level 1, dst) */
-    .hierarchy-chart .node-card.level-0 { background: #dbeafe; } /* Biru muda */
-    .hierarchy-chart .node-card.level-1 { background: #d1fae5; } /* Hijau muda */
-    .hierarchy-chart .node-card.level-2 { background: #fef3c7; } /* Kuning muda */
-    .hierarchy-chart .node-card.level-3 { background: #fee2e2; } /* Merah muda */
-    .hierarchy-chart .node-card.level-4 { background: #f3e8ff; } /* Ungu muda */
-    
-    /* Connectors (garis) biar ga nyaru, bikin lebih tebal & berwarna */
-    .hierarchy-chart .connector path {
-        stroke: #64748b; /* Abu gelap biar kontras */
-        stroke-width: 2px;
-    }
-    .hierarchy-chart .connector.arrow path {
-        fill: #64748b;
-    }
-`;
-
-// Append to head or page
-$('head').append(`<style>${customCss}</style>`);
