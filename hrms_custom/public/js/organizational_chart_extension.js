@@ -18,6 +18,7 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		position: "relative"
 	});
 
+
 	// Inject custom CSS untuk warna node dan connector
 	if (!$('#custom-org-chart-colors').length) {
 		$('<style id="custom-org-chart-colors">')

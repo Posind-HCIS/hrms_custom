@@ -25,7 +25,7 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/hrms_custom/css/hrms_custom.css"
+app_include_css = "/assets/hrms_custom/css/hrms_custom.css"
 # app_include_js = "/assets/hrms_custom/js/hrms_custom.js"
 
 # include js, css files in header of web template
@@ -264,6 +264,11 @@ permission_query_conditions = {
 # ]
 fixtures = [
        "Server Script",
+       "Custom Field",
+	   "Data Import",
+       "Branch",
+       "Designation",
+       "category_designation",
         # Add other DocTypes you want to export with your app
 ]
 

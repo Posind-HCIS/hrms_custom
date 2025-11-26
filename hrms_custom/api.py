@@ -102,7 +102,10 @@ def get_department_children(parent=None, company=None, department=None, show_sel
             "connections": len(children),
             "lft": 0,  # Placeholder values
             "rgt": 0,
-            "reports_to": d.parent_department or ""
+            "parent_id": d.parent_department or None,      # ini yang paling penting
+            "reports_to": d.parent_department,    
+            "is_group": d.is_group,
+            "department": d.name,   
         })
 
     nodes = []
@@ -188,7 +191,7 @@ def get_all_department_nodes(company=None):
             "disabled": 0,
         },
         fields=["name", "department_name", "parent_department", "is_group"],
-        order_by="department_name asc",
+        order_by="lft ASC",
     )
 
     # Build children lookup

@@ -1,0 +1,156 @@
+[
+ {
+  "appraisal_template": null,
+  "custom_category_designation": null,
+  "description": null,
+  "designation_name": "Analyst",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-20 12:17:51.733920",
+  "name": "Analyst",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Junior Analist-2",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.746040",
+  "name": "‌Junior Analist-2",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Junior Analist-3",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.761888",
+  "name": "‌Junior Analist-3",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Struktural",
+  "description": null,
+  "designation_name": "‌Manajer",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.768204",
+  "name": "‌Manajer",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Struktural",
+  "description": null,
+  "designation_name": "‌Asisten Manajer",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.774092",
+  "name": "‌Asisten Manajer",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Senior Manajer",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.778947",
+  "name": "‌Senior Manajer",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Pelaksana",
+  "description": null,
+  "designation_name": "‌Staf",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.782315",
+  "name": "‌Staf",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Struktural",
+  "description": null,
+  "designation_name": "‌Senior Vice President",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.794199",
+  "name": "‌Senior Vice President",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Struktural",
+  "description": null,
+  "designation_name": "‌Vice President",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.807864",
+  "name": "‌Vice President",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Analist-2",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.810416",
+  "name": "‌Analist-2",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Analist-1",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.832293",
+  "name": "‌Analist-1",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Junior Analist-1",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.894094",
+  "name": "‌Junior Analist-1",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Analist-3",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.936430",
+  "name": "‌Analist-3",
+  "skills": []
+ },
+ {
+  "appraisal_template": null,
+  "custom_category_designation": "‌Fungsional",
+  "description": null,
+  "designation_name": "‌Senior Analist-1",
+  "docstatus": 0,
+  "doctype": "Designation",
+  "modified": "2025-11-25 01:57:35.951765",
+  "name": "‌Senior Analist-1",
+  "skills": []
+ }
+]
