@@ -1,5 +1,10 @@
 # Instalasi Frappe, HRMS, dan HRMS Custom
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Posind-HCIS_hrms_custom&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Posind-HCIS_hrms_custom)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Posind-HCIS_hrms_custom&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Posind-HCIS_hrms_custom)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Posind-HCIS_hrms_custom&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Posind-HCIS_hrms_custom)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Posind-HCIS_hrms_custom&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Posind-HCIS_hrms_custom)
+
 Modul kustom untuk memperluas HRMS di Frappe/ERPNext. Menambahkan fitur seperti doctype kustom, laporan, dan alur kerja.
 
 ## Persyaratan (Requirements)
