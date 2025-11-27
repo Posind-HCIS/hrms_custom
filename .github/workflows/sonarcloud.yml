@@ -77,10 +77,8 @@ jobs:
             -Dsonar.organization=posind-hcis
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=hrms_custom
-            -Dsonar.tests=hrms_custom/tests
             -Dsonar.python.version=3.11
-            -Dsonar.exclusions=**/__pycache__/**,**/*.pyc,**/node_modules/**,**/migrations/**,**/.git/**,**/public/**,**/dist/**
-            -Dsonar.verbose=true
+            -Dsonar.exclusions=**/__pycache__/**,**/*.pyc,**/node_modules/**,**/migrations/**,**/.git/**,**/public/**,**/dist/**,**/tests/**,**/test_*.py
 
       - name: SonarCloud Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@d304d050d930b02a896b0f85935344f023928496  # v1.1.0
