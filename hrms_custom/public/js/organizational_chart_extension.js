@@ -219,55 +219,55 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		let dialog = new frappe.ui.Dialog({
 			title: __('Select Company'),
 			fields: [{
-					fieldtype: 'Link',
-					fieldname: 'company',
-					label: __('Company'),
-					options: 'Company',
-					default: selected_company,
-					reqd: 1,
-					onchange: function () {
-						// Clear department field when company changes
-						dialog.set_value('department', '');
-						// Refresh department field to apply new filter
-						if (dialog.fields_dict.department) {
-							dialog.fields_dict.department.refresh();
-						}
-					}
-				},
-				{
-					fieldtype: 'Check',
-					fieldname: 'has_department',
-					label: __('Filter by Department'),
-					onchange: function () {
-						let has_dept = dialog.get_value('has_department');
-						if (has_dept) {
-							dialog.set_df_property('department', 'reqd', 1);
-							dialog.get_field('department').$wrapper.show();
-						} else {
-							dialog.set_df_property('department', 'reqd', 0);
-							dialog.set_value('department', '');
-							dialog.get_field('department').$wrapper.hide();
-						}
-					}
-				},
-				{
-					fieldtype: 'Link',
-					fieldname: 'department',
-					label: __('Department'),
-					options: 'Department',
-					depends_on: 'eval:doc.has_department',
-					get_query: function () {
-						let company = dialog.get_value('company');
-						if (company) {
-							return {
-								filters: {
-									'company': company
-								}
-							};
-						}
-						return {};
+				fieldtype: 'Link',
+				fieldname: 'company',
+				label: __('Company'),
+				options: 'Company',
+				default: selected_company,
+				reqd: 1,
+				onchange: function () {
+					// Clear department field when company changes
+					dialog.set_value('department', '');
+					// Refresh department field to apply new filter
+					if (dialog.fields_dict.department) {
+						dialog.fields_dict.department.refresh();
 					}
 				}
+			},
+			{
+				fieldtype: 'Check',
+				fieldname: 'has_department',
+				label: __('Filter by Department'),
+				onchange: function () {
+					let has_dept = dialog.get_value('has_department');
+					if (has_dept) {
+						dialog.set_df_property('department', 'reqd', 1);
+						dialog.get_field('department').$wrapper.show();
+					} else {
+						dialog.set_df_property('department', 'reqd', 0);
+						dialog.set_value('department', '');
+						dialog.get_field('department').$wrapper.hide();
+					}
+				}
+			},
+			{
+				fieldtype: 'Link',
+				fieldname: 'department',
+				label: __('Department'),
+				options: 'Department',
+				depends_on: 'eval:doc.has_department',
+				get_query: function () {
+					let company = dialog.get_value('company');
+					if (company) {
+						return {
+							filters: {
+								'company': company
+							}
+						};
+					}
+					return {};
+				}
+			}
 			],
 			primary_action_label: __('Select'),
 			primary_action: function (values) {
@@ -325,9 +325,9 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 
 		// Append to page title area
 		$('.title-area>div>.flex').append(view_indicator);
-		
+
 		// Initial text ganti jadi kosong
-        view_indicator.text(__(''));
+		view_indicator.text(__(''));
 	}, 300);
 
 	function updateViewIndicator(view) {
@@ -337,7 +337,7 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 		} else if (view === 'employee') {
 			page.set_title_sub(__('| Employees'));
 			// $('.view-indicator').css('background', '#48bb78');
-		}else {
+		} else {
 			page.set_title_sub('');
 		}
 	}
@@ -345,7 +345,7 @@ frappe.pages['organizational-chart'].on_page_load = function (wrapper) {
 	function hideAvatar(view) {
 		if (view === 'department') {
 			$('.node-card .node-meta .mr-3').hide();
-		} else if (view === 'employee') {
+		} else {
 			$('.node-card .node-meta .mr-3').show();
 		}
 

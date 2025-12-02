@@ -102,10 +102,7 @@ def get_department_children(parent=None, company=None, department=None, show_sel
             "connections": len(children),
             "lft": 0,  # Placeholder values
             "rgt": 0,
-            "parent_id": d.parent_department or None,      # ini yang paling penting
-            "reports_to": d.parent_department,    
-            "is_group": d.is_group,
-            "department": d.name,   
+            "reports_to": d.parent_department
         })
 
     nodes = []

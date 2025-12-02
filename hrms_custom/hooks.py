@@ -28,6 +28,8 @@ app_license = "mit"
 app_include_css = "/assets/hrms_custom/css/hrms_custom.css"
 # app_include_js = "/assets/hrms_custom/js/hrms_custom.js"
 
+# Custom sidebar CSS for hrms_custom
+
 # include js, css files in header of web template
 # web_include_css = "/assets/hrms_custom/css/hrms_custom.css"
 # web_include_js = "/assets/hrms_custom/js/hrms_custom.js"
@@ -43,6 +45,10 @@ app_include_css = "/assets/hrms_custom/css/hrms_custom.css"
 page_js = {
 	"organizational-chart": "public/js/organizational_chart_extension.js",
 }
+
+app_include_css = [
+	"/assets/hrms_custom/css/sidebar_extension.css"
+]
 
 fixtures = [
     "dump_docs"	
@@ -265,10 +271,11 @@ permission_query_conditions = {
 fixtures = [
        "Server Script",
        "Custom Field",
-	   "Data Import",
-       "Branch",
-       "Designation",
-       "category_designation",
+       "Department"
+	#    "Data Import",
+    #    "Branch",
+    #    "category_designation",
+    #    "Designation",
         # Add other DocTypes you want to export with your app
 ]
 

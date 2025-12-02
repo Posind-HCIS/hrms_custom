@@ -1,0 +1,23 @@
+.body-sidebar,
+.body-sidebar-container .expanded {
+    background-color: #1f305e !important;
+}
+
+.active-sidebar {
+    background-color: #E34234 !important;
+}
+
+.span.sidebar-item-icon .text-ink-gray-7,
+.span.sidebar-item-label {
+    color: white !important;
+}
+
+.item-anchor:hover {
+    background-color: aqua !important;
+    border-radius: inherit !important;
+}
+
+.sidebar-item-label .sidebar-header,
+.sidebar-item-label .header-subtitle {
+    color: white !important;
+}
