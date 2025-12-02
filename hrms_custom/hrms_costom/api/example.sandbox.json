@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "6dd0d382-8793-4ae5-a06d-7cdc67b4816c",
+		"name": "Bootcamp: API Sandbox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24394471",
+		"_collection_link": "https://arms99.postman.co/workspace/HC-System-Workspace~3e2f82e8-f597-4ec8-b782-83b043ad0b28/collection/24394471-6dd0d382-8793-4ae5-a06d-7cdc67b4816c?action=share&source=collection_link&creator=24394471"
+	},
+	"item": [
+		{
+			"name": "TOKEN",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "vU_m_cAafPi2KBdP6gdxe51ftaga",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "x_QsmuVMMFJKdHC0u50kjJutVs4a",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://sandbox.posindonesia.co.id:8245/token",
+					"protocol": "https",
+					"host": [
+						"sandbox",
+						"posindonesia",
+						"co",
+						"id"
+					],
+					"port": "8245",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOGIN SSO",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "cacde0c5-6bca-3657-9db1-ddc4f9cde20e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-POS-Auth",
+						"value": "OTk1NDkxNjE2OjEyMzQ1Ng==",
+						"description": "MANDATORY,FORMAT : Base64_encode (nippos:password) OTk1NDkxNjE2OjEyMzQ1Ng==",
+						"type": "text"
+					},
+					{
+						"key": "X-POS-Key",
+						"value": "bXQyMDIzMjc=MUdaUENQR0JEWQ==",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://sandbox.posindonesia.co.id:8245/POS-SSO/1.1.0/auth/signIn",
+					"protocol": "https",
+					"host": [
+						"sandbox",
+						"posindonesia",
+						"co",
+						"id"
+					],
+					"port": "8245",
+					"path": [
+						"POS-SSO",
+						"1.1.0",
+						"auth",
+						"signIn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DETAIL PEGAWAI",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "cacde0c5-6bca-3657-9db1-ddc4f9cde20e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-POS-Key",
+						"value": "aXRtc3YydGJEeVpJZktISQ==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "nippos",
+							"value": "995491616",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://sandbox.posindonesia.co.id:8245/SDMEXT/1.1.0/masternew/pegawainew1",
+					"protocol": "https",
+					"host": [
+						"sandbox",
+						"posindonesia",
+						"co",
+						"id"
+					],
+					"port": "8245",
+					"path": [
+						"SDMEXT",
+						"1.1.0",
+						"masternew",
+						"pegawainew1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
