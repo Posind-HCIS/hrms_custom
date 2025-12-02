@@ -1,4 +1,13 @@
-name: SonarCloud
+# ==========================================
+# SonarCloud - Analisis Kualitas Kode
+# ==========================================
+# Workflow ini otomatis mengecek:
+# - Kualitas kode (bugs, vulnerabilities, code smells)
+# - Code coverage dari unit tests
+# - Code style dengan linter
+# ==========================================
+
+name: SonarCloud Analysis
 
 on:
   push:
@@ -9,22 +18,27 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
 
+# Hindari workflow duplikat berjalan bersamaan
 concurrency:
   group: sonarcloud-${{ github.event_name }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  quality-check:
-    name: Code Quality Analysis
+  code-quality:
+    name: Analisis Kualitas Kode
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout Code
+      # ========================================
+      # 1. PERSIAPAN
+      # ========================================
+      
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+          fetch-depth: 0  # Full history untuk analisis yang lebih akurat
 
-      - name: Setup Python
+      - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -33,44 +47,45 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install coverage pytest pytest-cov ruff flake8
+          pip install coverage pytest pytest-cov ruff
 
-      - name: Run Linters
+      # ========================================
+      # 2. CODE LINTING
+      # ========================================
+      
+      - name: Jalankan Ruff Linter
         run: |
-          echo "Running Ruff linter..."
-          ruff check hrms_custom/ --output-format=json > ruff-report.json || true
-          ruff check hrms_custom/ || true
+          echo "🔍 Mengecek code style dengan Ruff..."
+          ruff check hrms_custom/ || echo "⚠️ Linter menemukan issues"
         continue-on-error: true
 
-      - name: Run Tests with Coverage
+      # ========================================
+      # 3. TESTING & COVERAGE
+      # ========================================
+      
+      - name: Run Tests dengan Coverage
         run: |
-          echo "Running tests with coverage..."
-          pytest --cov=hrms_custom --cov-report=xml:coverage.xml --cov-report=term-missing || true
-          echo "Coverage report generated"
+          echo "🧪 Menjalankan unit tests..."
+          pytest --cov=hrms_custom \
+                 --cov-report=xml:coverage.xml \
+                 --cov-report=term-missing || echo "⚠️ Beberapa test gagal"
         continue-on-error: true
 
-      - name: Display Coverage Report
+      - name: Perbaiki Path Coverage Report
+        if: hashFiles('coverage.xml') != ''
         run: |
-          if [ -f coverage.xml ]; then
-            echo "Coverage report found"
-            head -n 20 coverage.xml
-          else
-            echo "No coverage report generated"
-          fi
-        continue-on-error: true
+          sed -i 's|/home/runner/work/hrms_custom/hrms_custom|/github/workspace|g' coverage.xml
 
-      - name: Fix Coverage Report Paths
-        run: |
-          if [ -f coverage.xml ]; then
-            sed -i 's|/home/runner/work/hrms_custom/hrms_custom|/github/workspace|g' coverage.xml || true
-          fi
-        continue-on-error: true
-
+      # ========================================
+      # 4. SONARCLOUD ANALYSIS
+      # ========================================
+      
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@e44258b109568baa0df60ed515909fc6c72cba92  # v2.3.0
+        uses: SonarSource/sonarcloud-github-action@v2.3.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        continue-on-error: false
         with:
           args: >
             -Dsonar.projectKey=Posind-HCIS_hrms_custom
@@ -79,15 +94,20 @@ jobs:
             -Dsonar.sources=hrms_custom
             -Dsonar.python.version=3.11
             -Dsonar.exclusions=**/__pycache__/**,**/*.pyc,**/node_modules/**,**/migrations/**,**/.git/**,**/public/**,**/dist/**,**/tests/**,**/test_*.py
+            -Dsonar.scm.provider=git
 
-      - name: SonarCloud Quality Gate
-        uses: sonarsource/sonarqube-quality-gate-action@d304d050d930b02a896b0f85935344f023928496  # v1.1.0
+      - name: Cek Quality Gate
+        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         continue-on-error: true
 
-      - name: Upload Coverage Artifact
+      # ========================================
+      # 5. SIMPAN HASIL
+      # ========================================
+      
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
