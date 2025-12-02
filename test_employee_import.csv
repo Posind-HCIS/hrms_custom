@@ -1,0 +1,4 @@
+employee_name,first_name,last_name,gender,date_of_birth,date_of_joining,department,designation,branch,company,status,personal_email
+john doe,John,Doe,Male,1990-01-15,2024-01-01,IT,Developer,Jakarta,Your Company,Active,john.doe@example.com
+jane smith,Jane,Smith,Female,1992-05-20,2024-01-15,HR,Manager,Jakarta,Your Company,Active,jane.smith@example.com
+bob wilson,Bob,Wilson,Male,1988-03-10,2024-02-01,Finance,Accountant,Surabaya,Your Company,Active,bob.wilson@example.com

@@ -43,20 +43,22 @@ app_include_css = "/assets/hrms_custom/css/hrms_custom.css"
 
 # include js in page
 page_js = {
-	"organizational-chart": "public/js/organizational_chart_extension.js",
+	"organizational-chart": "public/js/organizational_chart_extension.js"
 }
 
 app_include_css = [
 	"/assets/hrms_custom/css/sidebar_extension.css"
 ]
 
-fixtures = [
-    "dump_docs"	
-]
 
 # include js in doctype views
+doctype_js = {
+	"Employee": "public/js/employee.js"
+}
+
 doctype_list_js = {
-	"dump_docs": "public/js/dump_docs_list.js"
+	"dump_docs": "public/js/dump_docs_list.js",
+	"Employee": "public/js/employee_list.js" # untuk list view
 }
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -146,10 +148,12 @@ doctype_list_js = {
 # Hook on document methods and events
 
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
+# 	"Employee": {
+# 		"before_import": "hrms_custom.overrides.employee_import.before_import",
+# 		"validate": "hrms_custom.overrides.employee_import.validate",
+# 		"before_save": "hrms_custom.overrides.employee_import.before_save",
+# 		"after_insert": "hrms_custom.overrides.employee_import.after_insert",
+# 		"on_update": "hrms_custom.overrides.employee_import.on_update",
 # 	}
 # }
 
@@ -184,7 +188,8 @@ doctype_list_js = {
 #
 # Specify custom mixins to extend the standard doctype controller.
 extend_doctype_class = {
-	"dump_docs": "hrms_custom.base_modul.doctype.dump_docs.dump_docs.dump_docs"
+	"dump_docs": "hrms_custom.base_modul.doctype.dump_docs.dump_docs.dump_docs",
+	"Employee": "hrms_custom.overrides.employee.employee.Employee"
 }
 
 # Backend default filter via permission query conditions
@@ -206,6 +211,11 @@ permission_query_conditions = {
 # override_doctype_dashboards = {
 # 	"Task": "hrms_custom.task.get_dashboard_data"
 # }
+
+# Replace a DocType controller class with a custom one
+override_doctype_class = {
+	"Data Import": "hrms_custom.overrides.data_import.CustomDataImport",
+}
 
 # exempt linked doctypes from being automatically cancelled
 #
@@ -269,13 +279,12 @@ permission_query_conditions = {
 #     {"from_route": "/api/pong", "to_route": "hrms_custom.base_modul.doctype.dump_docs.api.pp.pong"}
 # ]
 fixtures = [
-       "Server Script",
-       "Custom Field",
-       "Department"
+    #    "Server Script",
+    #    "Custom Field",
 	#    "Data Import",
     #    "Branch",
-    #    "category_designation",
     #    "Designation",
+    #    "category_designation",
         # Add other DocTypes you want to export with your app
 ]
 

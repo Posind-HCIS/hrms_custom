@@ -8,12 +8,18 @@
 3. Klik **"+"** → **"Analyze new project"**
 4. Pilih: **`Posind-HCIS/hrms_custom`**
 5. Klik **"Set Up"**
+6. **⚠️ PENTING - Disable Automatic Analysis:**
+   - Setelah project dibuat, klik **Administration** tab
+   - Pilih **Analysis Method** (sidebar)
+   - Toggle **OFF** untuk "Automatic Analysis"
+   - Pilih **"GitHub Actions"** sebagai method
+   - Klik **Save**
 
 ### 2️⃣ **Generate Token**
 1. Di SonarCloud, klik icon user → **My Account** → **Security**
 2. Generate Tokens:
    - Name: `GitHub Actions HRMS Custom`
-   - Type: `Global Analysis Token`
+   - Type: `Global Analysis Token`  
    - Expires: `No expiration`
 3. **COPY TOKEN** (hanya muncul sekali!)
 
@@ -79,6 +85,22 @@ README sudah dilengkapi dengan badges:
 ---
 
 ## 🔧 Troubleshooting
+
+### ❌ "You are running CI analysis while Automatic Analysis is enabled"
+**Fix:** 
+1. Login ke https://sonarcloud.io
+2. Pilih project **Posind-HCIS_hrms_custom**
+3. Klik tab **Administration** (di menu project, bukan organization)
+4. Pilih **Analysis Method** (sidebar kiri)
+5. **DISABLE "Automatic Analysis"** - toggle ke OFF
+6. Pilih **"GitHub Actions"** atau **"CI-based analysis"**
+7. Klik **Save**
+
+**Alternatif jika tidak ada Analysis Method:**
+1. Di project page, clik **Project Settings**
+2. Scroll ke **General Settings**
+3. Cari opsi **"Automatic Analysis"**
+4. Set ke **OFF** atau **Disabled**
 
 ### ❌ "Error: SONAR_TOKEN not found"
 **Fix:** Pastikan secret `SONAR_TOKEN` sudah ditambahkan di GitHub repo settings
