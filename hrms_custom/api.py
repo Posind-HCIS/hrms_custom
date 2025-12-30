@@ -91,12 +91,12 @@ def get_department_children(parent=None, company=None, department=None, show_sel
         # Node for HierarchyChart - must match Employee format
         children = children_by_parent.get(d.name, [])
 
-        employee_name = frappe.db.get_value("Employee", {"company": company, "department": d.name, "status": "Active"}, "name")
+        title_node = frappe.db.get_value("Employee", {"company": company, "department": d.name, "status": "Active"},"employee_name") 
         
         return frappe._dict({
             "id": d.name,
-            "name": d.department_name or d.name,
-            "title": employee_name or "Departments",
+            "name": d.department_name or d.full_name,
+            "title": title_node or "Department",
             # "image": ,  # Department doesn't have image
             "expandable": 1 if children else 0,
             "connections": len(children),

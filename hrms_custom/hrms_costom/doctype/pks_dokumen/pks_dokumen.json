@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-12-15 15:35:45.753521",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tanggal",
+  "column_break_szxs",
+  "nama_dokumen",
+  "column_break_cmnm",
+  "dokumen_pks"
+ ],
+ "fields": [
+  {
+   "fieldname": "nama_dokumen",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Nama dokumen",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_cmnm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dokumen_pks",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "dokumen PKS",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tanggal",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Tanggal",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_szxs",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-12-15 15:45:49.348859",
+ "modified_by": "Administrator",
+ "module": "Hrms_costom",
+ "name": "pks_dokumen",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

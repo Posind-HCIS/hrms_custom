@@ -1,5 +1,18 @@
+.sidebar-item-icon .icon {
+    color: white !important;
+}
+
+.title-container .sidebar-item-label,
+.sidebar-item-label {
+    color: white !important;
+}
+
+.title-container .sidebar-item-label:hover {
+    color: black !important;
+}
+
 .body-sidebar,
-.body-sidebar-container .expanded {
+.body-sidebar-container {
     background-color: #1f305e !important;
 }
 
@@ -7,17 +20,8 @@
     background-color: #E34234 !important;
 }
 
-.span.sidebar-item-icon .text-ink-gray-7,
-.span.sidebar-item-label {
-    color: white !important;
-}
-
 .item-anchor:hover {
-    background-color: aqua !important;
-    border-radius: inherit !important;
-}
-
-.sidebar-item-label .sidebar-header,
-.sidebar-item-label .header-subtitle {
     color: white !important;
+    background-color: #E34234 !important;
+    border-radius: inherit !important;
 }
